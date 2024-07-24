@@ -2,9 +2,14 @@ package com.pizzeria.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.pizzeria.persistence.entity.Pizza;
+import com.pizzeria.persistence.repository.PizzaPagSortRepository;
 import com.pizzeria.persistence.repository.PizzaRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PizzaService {
   private final PizzaRepository pizzaRepository;
+  private final PizzaPagSortRepository pizzaPagSortRepository;
 
   /**
    * Constructor-based injection
@@ -20,24 +26,28 @@ public class PizzaService {
    * 
    * @param jdbcTemplate template
    */
-  public PizzaService(PizzaRepository pizzaRepository) {
+  public PizzaService(PizzaRepository pizzaRepository, PizzaPagSortRepository pizzaPagSortRepository) {
     this.pizzaRepository = pizzaRepository;
+    this.pizzaPagSortRepository = pizzaPagSortRepository;
   }
 
-  public List<Pizza> getAll() {
+  public Page<Pizza> getAll(int page, int elements) {
     try {
-      return this.pizzaRepository.findAll();
+      Pageable pageRequest = PageRequest.of(page, elements);
+      return this.pizzaPagSortRepository.findAll(pageRequest);
     } catch (Exception e) {
       log.error(e.getMessage());
       throw e;
     }
   }
 
-  public List<Pizza> getAvailable(){
+  public Page<Pizza> getAvailable(int page, int elements, String sortBy, String sortDirection){
     try {
       int count = this.pizzaRepository.countByVeganTrue();
       log.info("Count : {}", count);
-      return this.pizzaRepository.findAllByAvailableTrueOrderByPrice();
+      Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+      Pageable pageRequest = PageRequest.of(page, elements, sort);
+      return this.pizzaPagSortRepository.findByAvailableTrue(pageRequest);
     } catch (Exception e) {
       log.error(e.getMessage());
       throw e;
