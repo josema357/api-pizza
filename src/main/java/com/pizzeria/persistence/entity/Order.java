@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,5 +47,6 @@ public class Order {
   private Customer customer;
 
   @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+  @OrderBy("price DESC")
   private List<OrderItem> items;
 }

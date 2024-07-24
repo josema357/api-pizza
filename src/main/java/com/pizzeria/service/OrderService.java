@@ -53,4 +53,13 @@ public class OrderService {
       throw e;
     }
   }
+
+  public List<Order> getCustomerOrders(String idCustomer){
+    try {
+      return this.orderRepository.findCustomerOrders(idCustomer);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
 }
