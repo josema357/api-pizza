@@ -33,6 +33,51 @@ public class PizzaService {
     }
   }
 
+  public List<Pizza> getAvailable(){
+    try {
+      int count = this.pizzaRepository.countByVeganTrue();
+      log.info("Count : {}", count);
+      return this.pizzaRepository.findAllByAvailableTrueOrderByPrice();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
+
+  public Pizza getByName(String name){
+    try {
+      return this.pizzaRepository.findFirstByAvailableTrueAndNameIgnoreCase(name).orElseThrow(()->new RuntimeException("La pizza no existe"));
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
+  public List<Pizza> getWith(String name){
+    try {
+      return this.pizzaRepository.findAllByAvailableTrueAndDescriptionContainingIgnoreCase(name);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
+  public List<Pizza> getWithout(String name){
+    try {
+      return this.pizzaRepository.findAllByAvailableTrueAndDescriptionNotContainingIgnoreCase(name);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
+
+  public List<Pizza> getCheapest(Double price){
+    try {
+      return this.pizzaRepository.findTop3ByAvailableTrueAndPriceLessThanEqualOrderByPriceAsc(price);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      throw e;
+    }
+  }
+
   public Pizza get(int id_pizza) {
     try {
       return this.pizzaRepository.findById(id_pizza).orElse(null);

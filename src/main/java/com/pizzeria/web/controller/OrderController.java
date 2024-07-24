@@ -23,4 +23,14 @@ public class OrderController {
   public ResponseEntity<List<Order>> getAllOrders(){
     return ResponseEntity.ok(this.orderService.getAll());
   }
+
+  @GetMapping("/today")
+  public ResponseEntity<List<Order>> getTodayOrders(){
+    return ResponseEntity.ok(this.orderService.getTodayOrders());
+  }
+
+  @GetMapping("/outside")
+  public ResponseEntity<List<Order>> getOutsideOrders(){
+    return ResponseEntity.ok(this.orderService.getOutsideOrders());
+  }
 }
