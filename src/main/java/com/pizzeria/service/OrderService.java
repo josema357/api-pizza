@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pizzeria.persistence.entity.Order;
 import com.pizzeria.persistence.projection.OrderSummary;
 import com.pizzeria.persistence.repository.OrderRepository;
+import com.pizzeria.service.dto.RandomOrder;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,5 +68,10 @@ public class OrderService {
 
   public OrderSummary getSummary(int orderId){
     return this.orderRepository.findSummary(orderId);
+  }
+
+  @Transactional
+  public boolean saveRandomOrder(RandomOrder randomOrder){
+    return this.orderRepository.saveRandomOrder(randomOrder.idCustomer(), randomOrder.method());
   }
 }
