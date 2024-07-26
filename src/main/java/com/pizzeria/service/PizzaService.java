@@ -7,10 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pizzeria.persistence.entity.Pizza;
 import com.pizzeria.persistence.repository.PizzaPagSortRepository;
 import com.pizzeria.persistence.repository.PizzaRepository;
+import com.pizzeria.service.dto.UpdatePizzaPrice;
+import com.pizzeria.service.exception.EmailApiException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -113,6 +116,17 @@ public class PizzaService {
       log.error(e.getMessage());
       throw e;
     }
+  }
+
+  @Transactional(noRollbackFor = EmailApiException.class)
+  public void updatePrice(UpdatePizzaPrice dto){
+    this.pizzaRepository.updatePrice(dto);
+    this.sendEmail();
+  }
+
+  //Este metodo es para probar el funcionamiento de Transactional
+  public void sendEmail(){
+    throw new EmailApiException();
   }
 
   public boolean exists(int idPizza) {

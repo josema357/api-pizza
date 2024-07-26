@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pizzeria.persistence.entity.Pizza;
 import com.pizzeria.service.PizzaService;
+import com.pizzeria.service.dto.UpdatePizzaPrice;
 
 @RestController
 @RequestMapping("/api/pizzas")
@@ -80,6 +81,15 @@ public class PizzaController {
   public ResponseEntity<Pizza> update(@RequestBody Pizza pizza){
     if(pizza.getIdPizza() != null || this.pizzaService.exists(pizza.getIdPizza())){
       return ResponseEntity.ok(this.pizzaService.save(pizza));
+    }
+    return ResponseEntity.badRequest().build();
+  }
+
+  @PutMapping("/price")
+  public ResponseEntity<Void> updatePrice(@RequestBody UpdatePizzaPrice dto){
+    if(this.pizzaService.exists(dto.pizzaId())){
+      this.pizzaService.updatePrice(dto);
+      return ResponseEntity.ok().build();
     }
     return ResponseEntity.badRequest().build();
   }
