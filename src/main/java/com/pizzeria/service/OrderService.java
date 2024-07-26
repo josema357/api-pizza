@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.pizzeria.persistence.entity.Order;
+import com.pizzeria.persistence.projection.OrderSummary;
 import com.pizzeria.persistence.repository.OrderRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +62,9 @@ public class OrderService {
       log.error(e.getMessage());
       throw e;
     }
+  }
+
+  public OrderSummary getSummary(int orderId){
+    return this.orderRepository.findSummary(orderId);
   }
 }

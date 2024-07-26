@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pizzeria.persistence.entity.Order;
+import com.pizzeria.persistence.projection.OrderSummary;
 import com.pizzeria.service.OrderService;
 
 @RestController
@@ -38,5 +39,10 @@ public class OrderController {
   @GetMapping("/customer/{id}")
   public ResponseEntity<List<Order>> getOutsideOrders(@PathVariable String id){
     return ResponseEntity.ok(this.orderService.getCustomerOrders(id));
+  }
+
+  @GetMapping("/summary/{id}")
+  public ResponseEntity<OrderSummary> getOrderSummary(@PathVariable int id){
+    return ResponseEntity.ok(this.orderService.getSummary(id));
   }
 }
