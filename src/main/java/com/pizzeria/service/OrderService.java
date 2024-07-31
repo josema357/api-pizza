@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,7 @@ public class OrderService {
     }
   }
 
+  @Secured("ROLE_ADMIN")
   public List<Order> getCustomerOrders(String idCustomer){
     try {
       return this.orderRepository.findCustomerOrders(idCustomer);
